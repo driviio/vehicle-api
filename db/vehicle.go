@@ -7,9 +7,9 @@ import (
 )
 
 type VehicleLog struct {
-	ID int64
+	ID        int64
 	VehicleID int64
-	Data string
+	Data      string
 }
 
 type vehicleDB struct {
@@ -57,12 +57,12 @@ func (db *vehicleDB) vehicleLogKey(id int64) *datastore.Key {
 func (db *vehicleDB) GetVehicleLog(id int64) (*VehicleLog, error) {
 	ctx := context.Background()
 	k := db.vehicleLogKey(id)
-	book := &VehicleLog{}
-	if err := db.client.Get(ctx, k, book); err != nil {
+	log := &VehicleLog{}
+	if err := db.client.Get(ctx, k, log); err != nil {
 		return nil, fmt.Errorf("datastoredb: could not get Book: %v", err)
 	}
-	book.ID = id
-	return book, nil
+	log.ID = id
+	return log, nil
 }
 
 // AddVehicleLog saves a given ad, assigning it a new ID.
@@ -79,18 +79,18 @@ func (db *vehicleDB) AddVehicleLog(b *VehicleLog) (id int64, err error) {
 // ListVehicleLog returns a list of ads, ordered by title.
 func (db *vehicleDB) ListVehicleLog() ([]*VehicleLog, error) {
 	ctx := context.Background()
-	ads := make([]*VehicleLog, 0)
+	logs := make([]*VehicleLog, 0)
 	q := datastore.NewQuery("VehicleLog")
 
-	keys, err := db.client.GetAll(ctx, q, &ads)
+	keys, err := db.client.GetAll(ctx, q, &logs)
 
 	if err != nil {
-		return nil, fmt.Errorf("datastoredb: could not list ads: %v", err)
+		return nil, fmt.Errorf("datastoredb: could not list logs: %v", err)
 	}
 
 	for i, k := range keys {
-		ads[i].ID = k.ID
+		logs[i].ID = k.ID
 	}
 
-	return ads, nil
+	return logs, nil
 }

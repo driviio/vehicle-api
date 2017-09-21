@@ -21,8 +21,8 @@ func (h *vehicleHandler) CreateVehicleLog(c echo.Context) error {
 		return err
 	}
 	dbLog := &db.VehicleLog{
-		VehicleID:ParseInt64(c.Param("vehicleId")),
-		Data:log.Data,
+		VehicleID: ParseInt64(c.Param("vehicleId")),
+		Data:      log.Data,
 	}
 	_, err := h.vehicleDB.AddVehicleLog(dbLog)
 	if err != nil {

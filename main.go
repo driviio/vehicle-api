@@ -9,10 +9,11 @@ import (
 	"github.com/labstack/echo/middleware"
 	"gopkg.in/go-playground/validator.v9"
 	"log"
+	"os"
 )
 
 func main() {
-	client, err := db.NewDataStoreClient("drivi-180613")
+	client, err := db.NewDataStoreClient(os.Getenv("DATASTORE_PROJECT_ID"))
 	if err != nil {
 		log.Fatalf("error creating datastore client %v", err)
 	}
@@ -32,7 +33,7 @@ func main() {
 
 	vehicle := handler.NewVehicleHandler(adDB)
 	e.POST("/vehicle/:id/log", vehicle.CreateVehicleLog)
-	e.POST("/vehicle/log/list", vehicle.GetVehicleLogList)
+	e.GET("/vehicle/log/list", vehicle.GetVehicleLogList)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
